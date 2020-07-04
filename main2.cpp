@@ -153,7 +153,7 @@ requestedPageNo=atol(argv[3]);
 int fromIndex=atol(argv[4])%256;
 int toIndex=atol(argv[5])%256;
 
-printf("\nrequestedELA =%.2X requestedPageNo=%.2X",requestedELA,requestedPageNo);
+///printf("\nrequestedELA =%.2X requestedPageNo=%.2X",requestedELA,requestedPageNo);
     ///
 
     ///
@@ -181,14 +181,22 @@ printf("\nrequestedELA =%.2X requestedPageNo=%.2X",requestedELA,requestedPageNo)
     // };
     // vector <pageData> myPageData;
     // Read file line by line, and process it
+bool endOfFile=false;
     while (getline(inFile, line))
     {
 
         LineData currLineData;
+        if(line==":00000001FF")
+        endOfFile=true;
         ParseLine(line, currLineData.Data);
         fileData.push_back(currLineData);
         
         lineCounter++;
+    }
+    if(endOfFile==false)
+    {
+        printf("\nDidn't find End of File");
+        exit(0);
     }
     int checkSumIndex=0;
     BYTE checkSum=0;
@@ -240,7 +248,7 @@ pageIndex=fileData.at(j).Data.at(2);
     }
 
             break;
-        case RECORD_DATA_TYPE_EOF:
+        case RECORD_DATA_TYPE_EOF://
            /// printf("\nFinished file");
             // exit(0);
             break;
@@ -256,7 +264,8 @@ pageIndex=fileData.at(j).Data.at(2);
             break;
         }
     }
-    printf("\n");
+    //printf("\n");
+    system("cls");
     for(int i=fromIndex;i<=toIndex;i++){
     if(i%16==0)
     printf("\n");
