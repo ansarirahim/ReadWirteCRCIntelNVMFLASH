@@ -172,11 +172,32 @@ BYTE getNVM_CRC(BYTE *CKBlock, uint32_t Length, BYTE Seed)
 	}
 	return (crc);
 }
-int main(int argc, char **argv)
+char addresshigh,addressmid,addresslow;
+int fromIndex,toIndex;
+int main(int argc, char *argv[])
+
 {
+  //      int ret = 0;
+    //    int fd;
+///     Spi_address = 256 * atol(argv[1]);
+addresshigh=atoi(argv[2]);
+addressmid=atoi(argv[3]);
+addresslow=atoi(argv[4]);
+fromIndex=atoi(argv[5]);
+if(fromIndex>=256)
+fromIndex=255;
+toIndex=atoi(argv[6]);
+if(toIndex+fromIndex>256)
+toIndex=1;
+
+
+
+///printf("\nfi=%d toi=%d",fromIndex,toIndex);
+//int main(int argc, char **argv)
+//{
 //char *end=":00000001FF";
 //char *pcmp=NULL;
-    if (argc != 2)
+    if (argc != 7)
     {
         printf("\nNACK");
         return 0;
@@ -188,6 +209,7 @@ int main(int argc, char **argv)
         if (argv[1][i] == '\0')
             break;
     }
+//address
 
     //argv[1];
 ///    requestedELA = atol(argv[2]);
@@ -375,24 +397,35 @@ fileData.clear();
 fileData.shrink_to_fit();
 BYTE yed=80;
 //////////CRC//
+
+//printf("\nRequested extAdres=%d mid=%d fi=%d toi=%d",addresshigh,addressmid,fromIndex,toIndex);
 for(unsigned int i=0;i<vPageDetails.size();i++)
  {
-printf("\n%.2X %.2X\n",vPageDetails.at(i).extendedLinearAdderess,vPageDetails.at(i).pageNo);
-   for(int k=0;k<256;k++)
+if(addresshigh==vPageDetails.at(i).extendedLinearAdderess)
 {
-if(k%16==0)
-printf("\n");
-printf("%.2X",vPageDetails.at(i).pageData[k]);
+	if(addressmid==vPageDetails.at(i).pageNo)
+{
+printf("(HEX DUMP)=>%.2X %.2X %.2X %.3X\n",vPageDetails.at(i).extendedLinearAdderess,vPageDetails.at(i).pageNo,fromIndex,toIndex);
+   for(int k=fromIndex;k<(fromIndex+toIndex);k++)
+	{
+	if(k%16==0)
+	printf("\n");
+	printf("%.2X",vPageDetails.at(i).pageData[k]);
+	} 
+
+///   yed = getNVM_CRC(vPageDetails.at(i).pageData, 256, yed);  
+}
 } 
-   yed = getNVM_CRC(vPageDetails.at(i).pageData, 256, yed);  
- }
- printf("\n\nCRC41 of Data=0x%.2X i=%d linceCounter=%u exc=%u pgc=%u\n",yed,vPageDetails.size(),lineCounter,lc,pageCounter);
+}
+
+
+ //printf("\n\nCRC41 of Data=0x%.2X i=%d linceCounter=%u exc=%u pgc=%u\n",yed,vPageDetails.size(),lineCounter,lc,pageCounter);
  ///
 // printf("\nfileData Size=%u",fileData.size());
 // vPageDetails.shrink_to_fit();
 //  printf("\nExtLA=%u PC=%u,vPageDetails=%u", lc, pageCounter,vPageDetails.size());
 
-//  //printf("\n");
+printf("\n");
  
 
 
