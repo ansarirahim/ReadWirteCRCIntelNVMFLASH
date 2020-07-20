@@ -42,7 +42,7 @@
 #define SS7  P9_31
 extern unsigned char Rxd[];
 
-char *PinNamesSSS[]={"P9_15","P9_23","P9_12","P9_27","P9_41","P9_42","P9_30","P9_31"};
+//char *PinNamesSSS[]={"P9_15","P9_23","P9_12","P9_27","P9_41","P9_42","P9_30","P9_31"};
 #define ONE_MB (1024*1024)
 #define LENGTH_OF_1MB (ONE_MB/sizeof(Rxd))
 void msleep(unsigned long msec);
